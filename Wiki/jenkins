@@ -1,0 +1,40 @@
+Jenkins in MAC
+
+1)Install Jenkins from terminal
+brew install jenkins-lts
+
+2)Start the Jenkins
+brew services start jenkins-lts
+
+3)open default port url in browser
+Localhost:8080/
+
+4)fetch the password from terminal
+cat /Users/shwetakangane/.jenkins/secrets/initialAdminPassword
+
+5)Enter the password in Jenkins
+
+6)How to stop Jenkins from terminal
+brew services stop jenkins-lts
+
+7)how to uninstall Jenkins from terminal and cleanup dependency
+brew uninstall jenkins-lts --force
+brew cleanup
+
+
+
+
+
+Method 2: Install Jenkins Using Docker
+1)install docker
+2)docker run -p 8080:8080 -p 50000:50000 -v ~/jenkins_home:/var/jenkins_home jenkins/jenkins:lts
+3)Unlock and Run Jenkins
+
+
+
+Own Jenkins setup:
+Url: localhost:8080/
+Username: shwetakangane
+Password: shweta@1098
+Email: shwetaskangane@gmail.com
+

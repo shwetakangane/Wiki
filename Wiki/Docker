@@ -1,0 +1,87 @@
+Docker
+
+
+Images and container
+Images- template of project
+Ready to use —contains all things related to image which needs to run application like dependencies, tools,source code,etc.
+Read to use—> unable to change existing image 
+
+Container- Running instance of image
+Project image—>(Run) Container
+Its a process that runs applications with images
+It is Isolated process mean independent
+Run independently on computer
+
+Docker desktop provides more functionality as compared to docker hub.
+
+Base Image/Parent Image—>
+Docker file—>(Build)Docker image—>(Run)Docker container
+
+Pull Image and Run Container
+Command: docker pull <image name>
+Run command: docker run -it node /bin/bash
+
+Dockerfile — create image
+— set of instructions
+— FROM node:latest //download node js with latest version 
+—WORKDIR  //specific directory
+— COPY . .//to create image
+— RUN npm install/ /no need to move node modules we will install npm
+—EXPOSE 5500//app.prop port
+—CMD [“node”,”index.js”]
+
+
+Commands from command line
+Build-- docker build -t basic-app .
+docker
+build
+-t basic-app — image name
+. -- Which folder
+
+Container with project image
+0 is to generate random port of container
+32769:5500—>Internally app is running on 5500 port but you can access by 32769 port externally
+
+Docker ignore file
+To exclude files while creating image
+.dockerignore file
+Mention the file name inside dockerignore file
+
+Delete images and container
+commandline:
+docker image rm bankingapp211 -f
+-f —>forcefully delete
+docker system prume -a //to delete all images
+
+Manage versions of images
+Build with creating version: docker build -t bankingapp:v1 .
+Run image by create container: docker run --name bankingappcontainer -p 8080:8080 bankingapp:v1
+
+Volumes in docker
+After changing in code automatically will update in container
+Continues changes in container with volume
+Add nodemon and update docker file
+Create volume and update container
+
+Compose file
+Multiple commands can add in compose.yaml file
+services:
+  img:
+    build: .
+    container_name: demo-container
+    ports:
+     - 8080:8080
+
+command: docker compose up
+
+Push or Pull image in docker hub
+docker login
+docker push webshweta/demoapp
+docker pull webshweta/demoapp
+
+Restart docker container
+docker-compose down
+docker-compose up -d
+
+Check Postgres logs
+docker logs postgres-db

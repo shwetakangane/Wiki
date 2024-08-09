@@ -1,0 +1,156 @@
+Java 8
+
+* Collection Interface released in Java 1.2.
+
+1. Interface
+      Collection of abstract methods(abstract method-no body)
+      Default method 
+      no compilation error because definition will be in interface itself and we can override later
+      Static method  
+      no compilation error because definition will be in interface itself but we cannot override as static method unable to override
+
+     default method has been added in Iterator interface which is extending by Collection that’s y no need to override by implementation classes.
+
+2. Lambda
+       Java is OOP(Classes & object) language  after 1.8 its functional programming language as well.
+       functional programming language means methods can write outside class as well, function can pass as argument to other method.
+       Lambda is anonymous function which enable functional programming
+       Anonymous means no name, no return type, no modifier
+
+3.Functional Interface(Comparable,Runnable,Callable)
+     Used to invoke lambda expression
+    Only have one abstract method
+     Marker interface Vs Functional interface: Marker doesn’t contain any method but FI have single abstract method
+     Predefined FI
+     Predicate: used for conditional check ,returns true/false
+     test()(abstract method) and or(),and()(default method)
+     Takes input, returns boolean value
+     public class Test{
+	public static void main(String[] args) {
+		Integer[] names= {1,2,3,4,5,10};
+		Predicate<Integer> p=name->name%2==0;
+		for(Integer name:names) {
+			if(p.test(name)) {
+				System.out.println(name);
+			}}}}
+
+      Predicate Joining-to combine more predicate, or() & and() method used
+      Predicate<Employee> empLoc= e->e.location.equals("Hyd");
+		Predicate<Employee> empTeam=e->e.dept.equals("DB");
+		
+		Predicate<Employee> finalEmp = empLoc.and(empTeam);
+		for(Employee emp:emps) {
+			if(finalEmp.test(emp)) {
+				System.out.println(emp.name);
+				}}
+
+      BiPredicate->Accept 2 inputs and returns boolean value
+
+      Supplier: 
+      get() method(abstract method)
+      Doesnt accept any input and returns value. ex. Top generation
+      Supplier<String> s=()->{
+			String otp="";
+			for(int i=0;i<5;i++) {
+				otp=otp+(int)(Math.random()*10);				
+			}
+			return otp;
+		};
+		System.out.println(s.get());
+
+     Consumer: 
+    taking input but not giving output
+    accept()(abstract method)
+    forEach() accept Consumer
+       Added in iterable interface
+       Default method
+       
+
+      BiConsumer->Accept 2 inputs and return no value
+
+
+     Function->
+    Taking input return output
+    apply()(abstract method)
+
+      BiFunction->Accept 2 inputs and returns value
+
+4.Method reference and constructor reference
+
+5.StringJoiner
+   We can specify delimiter for string
+   StringJoiner sj=new StringJoiner("-");
+   We can specify suffix, prefix for string
+   StringJoiner sjj=new StringJoiner("-","(",")");
+
+6.Optional
+Handle null pointer exception
+If we will return Option<string> , whoever is calling the method they need to check whether value is present or not in optional and needs to be handle the scenario.
+isPresent() used to check optional value.
+
+7.Date and Time Api
+Java.util.date->normal date related operations
+java.sql.date-> while ceiling with DB
+java.text.SimpleDateFormat used to format date.
+  Date to string -> String parse(Date d)
+   String to Date->Date format(String d)
+
+To overcome the problem related to Date class ,java 8 introduced new class
+LocalDate,LocalTime,LocalDateTime,Period,Duration
+
+8. Stream api
+   Not a data structure
+   Process the data given by source
+  Source can be collection or array
+
+2 ways to create stream:-> 1)stream method and 2)Stream.of()
+
+Operation can do on Stream api 
+Intermediate operation ->performs operation  on stream and returns new stream
+filter(),map(),slicing
+Terminal operation-> will take input and provide result
+count(),finding,matching,collecting
+
+Filters ->filter()
+
+Maping-> mãp and Flatmap
+
+Slicing operation with stream(Intermediate operations)
+1. distinct()->get unique element
+2. limit(long maxSize)->only limited element will get
+3. skip(long n)->can skip some elements
+
+
+Matching operation with stream(Terminal operations)
+1.Boolean anyMatch(Predicate p) ->
+2.Boolean noneMatch(Predicate p) ->
+3.Boolean allMatch()Predicate p ->
+
+Based on condition returns true/false.
+
+Collectors with stream
+Collect method
+
+Finding->findFirst and findAny
+
+GroupBy
+
+Parellel Stream
+To improve performance
+
+9.Spliterator
+ Use to traverse collection and stream
+Cannot user with map implementation classes
+Supports parellel programming as well as serial programming
+Its interface in Collection api
+
+
+
+
+
+
+    
+
+
+   
+

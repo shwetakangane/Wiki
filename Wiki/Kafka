@@ -1,0 +1,18 @@
+Apache Kafka
+
+Kafka run on zookeeper.Zookeeper creates environment to run kafka.
+
+1)Install kafka from CLI in MAC M2
+brew install kafka
+2)Start zookeeper 
+/opt/homebrew/bin/zookeeper-server-start /opt/homebrew/etc/zookeeper/zoo.cfg
+3)Start apache Kafka
+/opt/homebrew/bin/kafka-server-start /opt/homebrew/etc/kafka/server.properties
+4)Create topic
+kafka-topics --create --bootstrap-server localhost:9092 --replication-factor 1 --partitions 1 --topic kafkademo
+List the topics
+kafka-topics --list --bootstrap-server localhost:9092
+List the group
+kafka-consumer-groups --bootstrap-server localhost:9092 --list
+
+

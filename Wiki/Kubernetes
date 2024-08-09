@@ -1,0 +1,216 @@
+Kubernetes/K8S
+
+Docker container managed by k8s
+K8s developed by google and later donated to other
+
+Container orchestration platform (orchestration=management)
+Scalability/auto scaling - automatically container increasing or decreasing depends on load
+Self healing/auto healing - automatically recovery of container if got damage
+Load balancing - if our application running multiple container then it will distribute load between container by round robin fashion
+———————————
+K8S architecture
+———————————
+Based on cluster architecture
+Cluster - group of server
+
+Control plane(master node) 
+ -which will manage everything in k8s
+ -Api server,scheduler,controller manager,etcd
+
+Worker node
+-perform task  decided by control plane
+-contains pods, container, docker engine,kubelet,kube proxy
+
+Kubectl
+To communicate with control plane
+===============================
+K8S architecture component
+===============================
+Control plane
+-api server will accept req and will store in etcl
+-etcd is internal database for cluster which mention all req info
+-scheduler will check pending task in etcd and schedule in worker node
+-scheduler will get available nodes info from kubelet
+-kubelet is worker node agent
+-controller manager will monitor all k8s resources functionality
+
+Worker node
+-Kube-proxy provides network for cluster communication
+-Pod is running instance of application
+Note: in k8s ,our app is getting deploy in pod and containers will get create in pod.
+
+================
+What is Pod?
+================ 
+-Pod is smallest building block that can we deploy in k8s cluster.
+-Our app will get deploy in k8s cluster as pod only
+-for one app we can create multiple pod replicas for high availability
+-for every pod one ip address get generated
+-if pod get crashed/damaged then k8s will replace it (self healing)
+-to create pod we will use manifest yml file
+Note: By default pods are accessible only with in the cluster(we can’t access outside)
+-to expose pods outside access we need to use k8s services concept
+
+=======================
+What is service in k8s?
+=======================
+-k8s service used to expose pods.
+-we have 3 types of services
+1)Cluster IP(to access pods within the cluster)
+2)Node Port (Top access PODs using Node Public IP)
+3)Load Balancer (To distribute the traffic to pod replicas)
+
+=========================
+K8S manifest yml syntax
+=========================
+
+- - -  
+apiVersion: apps/v1 //which app version need to use that need to check in official doc of k8s
+kind: Deployment // I want to deploy app in k8s
+metadata: 
+    Name: javawebappdeployment //provide name to deployment
+spec:
+  replicas: 2 //how many pods you need to deploy (multiple pod that means high availability)
+  strategy: // Deployment strategy
+       type: RollingUpdate
+  selector: //give label to pod that which pod you are deploying
+       matchLabels:
+            app: javawebapp
+  template: //
+      metadata: //any name to pod
+          name: javawebapppod
+          labels: //configure pod name as selector it is nothing but id for pod
+              App: javawebapp
+      spec:
+          containers:
+         - name: javawebappcontainer
+            image: shot/javawebapp
+            ports:
+              - contanerPort: 8080
+- - - 
+
+===================
+Commands
+==================
+
+Check running pods
+$kubectl get pods 
+
+Check pods running in which worker node
+$kubectl get pods -o wide
+
+Check services created
+$kubectl get svc
+
+Check deployment created 
+$kubectl get deployment
+
+Execute k8s manifest yml
+$kubectl apply -f <yml>
+
+$kubectl get all
+
+Delete resources we have created
+$kubectl delete all —all
+$kubectl delete pod <pod name>
+$kubectl delete service <service name>
+$kubectl delete deployment <deployment name>
+$kubectl logs <pod name>
+
+
+
+https://kubernetes.io/docs/reference/kubectl/quick-reference/
+===============================================================
+
+---     
+apiVersion: v1
+kind: Service
+metadata:
+  name: bankingapp
+  labels:
+    app: bankingapp
+spec:
+  type: NodePort
+  selector:
+    app: bankingapp
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8081
+      nodePort: 30001
+
+---
+apiVersion: apps/v1 #which app version need to use that need to check in official doc of k8s
+kind: Deployment # I want to deploy app in k8s
+metadata: 
+    name: bankingapp #provide name to deployment
+spec:
+  replicas: 1 #how many pods you need to deploy (multiple pod that means high availability)
+  selector: #give label to pod that which pod you are deploying
+       matchLabels:
+            app: bankingapp
+  template: 
+      metadata: #any name to pod
+          labels: #configure pod name as selector it is nothing but id for pod
+              app: bankingapp
+      spec:
+          containers:
+          - name: bankingapp
+            image: webshweta/bankingapp:latest
+            ports:
+              - containerPort: 8010
+            livenessProbe: 
+             httpGet: 
+              path: /health
+              port: 8010
+             initialDelaySeconds: 30
+             timeoutSeconds: 1
+
+===========================================================================
+Steps to deploy image in Kubernetes (Minikube)
+Step 1: go to project location and open terminal
+Step 2: build project
+		Gradle: gradle clean build
+		Maven: mvn clean install
+Step 3: build docker image followed by docker hub username
+		docker build -t webshweta/firstdemoapp:latest .
+Step 4: Login to docker hub with own credentials 
+		docker login  
+		username: webshweta
+		password: Shweta@1098
+Step 5: if you haven’t built image followed by docker hub username 
+		docker tag firstdemoapp:latest webshweta/firstdemoapp:latest
+		Otherwise you can direct push image to docker hub
+Step 6: Push image to docker hub
+		docker push webshweta/firstdemoapp:latest
+Step 7: logout docker hub
+		docker logout
+Step 8: kubectl apply -f demo-service.yaml
+		demo-service.yaml contains service and deployment configuration
+Step 9: minikube service <service name>
+		Will get ip address
+Step 10: open browser and check the output
+===========================================================================
+If you want to deploy with compose file
+This will create yaml files
+kompose convert -f docker-compose.yml
+
+Apply all files
+kubectl apply -f .
+===========================================================================
+Horizontal Pod Autoscale (HPA)
+===========================================================================
+-to automatically scale up and scale down the pods 
+- [ ] How HPA Works?
+-We need to install metric server in k8s  server
+-Metric server will monitor the resources and the limits what we have configured
+-Metric server will give input to HPA related to CPU/memry utilization if they given threshold limit is crossed then spa is going to scale up our pod or scale down the pods
+
+
+
+
+
+
+
+
+
